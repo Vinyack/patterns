@@ -1,6 +1,6 @@
 puts "Введите код Ruby, который хотите выполнить"
-code = gets.to_s
+code = gets
 eval(code)
 puts "Введите код ОС, который хотите выполнить"
-os = gets.to_s
+os = gets
 system(os)
