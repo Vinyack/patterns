@@ -20,3 +20,13 @@ def find_first_positive(arr)
   end
   nil  # Возвращаем nil, если положительных элементов не найдено
 end
+# Создаем массив чисел
+numbers = [-5, -10, 0, 3, -1, 7, -3]
+
+# Находим минимальный элемент
+min_element = find_min_element(numbers)
+puts "Минимальный элемент: #{min_element}"
+
+# Находим первый положительный элемент
+first_positive = find_first_positive(numbers)
+puts "Первый положительный элемент: #{first_positive.nil? ? 'Не найден' : first_positive}"
