@@ -1,66 +1,75 @@
 # ЗАДАНИЕ 4
-require 'prime'  # Подключаем модуль для работы с простыми числами (для 3-го метода)
-# ВАРИАНТ 6
-# МЕТОД 1
-def sum_of_non_prime_divisors
+
+# МЕТОД 1: Сумма непростых делителей числа
+def sum_of_non_prime_divisors(number)
+  divisors = (1..number).select do |i|
+    number % i == 0 && !prime?(i)
+  end
+  divisors.sum
+end
+
+def prime?(n)
+  return false if n < 2
+  (2..Math.sqrt(n)).none? { |d| n % d == 0 }
+end
+
+def method_1
   print "Введите число: "
   number = gets.to_i
-  # проверка, является ли число простым
-  sum = (1..number).select { |i| number % i == 0 && (i <= 1 || (2..Math.sqrt(i)).any? { |d| i % d == 0 }) }.sum
+  sum = sum_of_non_prime_divisors(number)
   puts "Сумма непростых делителей числа #{number} равна #{sum}"
 end
-sum_of_non_prime_divisors
-# МЕТОД 2
+
+# МЕТОД 2: Подсчёт цифр, меньших 3
 def count_digits_less_than_3(number)
-  # преобразуем число в строку, а затем в массив цифр
-  digits = number.to_s.chars
-  # подсчитываем цифры, которые меньше 3
-  digits.count { |digit| digit.to_i < 3 }
+  number.digits.count { |digit| digit < 3 }
 end
-print "Введите число: "
-number = gets.chomp.to_i
-puts "Количество цифр меньше 3: #{count_digits_less_than_3(number)}"
-# МЕТОД 3
-require 'prime'  # Подключаем модуль для работы с простыми числами
-# алгоритм Евклида
+
+def method_2
+  print "Введите число: "
+  number = gets.to_i
+  count = count_digits_less_than_3(number)
+  puts "Количество цифр меньше 3: #{count}"
+end
+
+# МЕТОД 3: Вычисление по условиям
 def gcd(a, b)
-  # Используем цикл для нахождения НОД
-  while b != 0
-    a, b = b, a % b  # Присваиваем a значение b, а b — остаток от деления a на b
-  end
-  return a
+  b == 0 ? a : gcd(b, a % b)
 end
-# функция для вычисления суммы простых цифр числа
+
 def prime_digit_sum(number)
-  digits = number.digits  # Разбиваем число на массив его цифр
-  sum = 0  # Переменная для хранения суммы простых цифр
-
-  # проходим по каждой цифре числа
-  for digit in digits
-    # проверяем, является ли цифра простой
-    if Prime.prime?(digit)
-      sum += digit  # если цифра простая, добавляем её к сумме
-    end
-  end
-
-  return sum  # Возвращаем итоговую сумму простых цифр
+  number.digits.select { |digit| prime?(digit) }.sum
 end
-# функция для решения задачи
+
 def solve(num)
-  prime_sum = prime_digit_sum(num)  # Вычисляем сумму простых цифр числа
-
-  count = 0  # Переменная для подсчёта подходящих чисел
-
-  # Проходим по всем числам от 1 до num-1 и проверяем условия
-  for i in 1...num
-    if (num % i != 0) && (gcd(num, i) != 1) && (gcd(prime_sum, i) == 1)
-      count += 1  # Если все условия выполнены, увеличиваем счётчик
-    end
+  prime_sum = prime_digit_sum(num)
+  (1...num).count do |i|
+    num % i != 0 && gcd(num, i) != 1 && gcd(prime_sum, i) == 1
   end
-
-  return count
 end
-puts "Введите число: "
-number = gets.to_i
-result = solve(number)
-puts "Результат: #{result}"
+
+def method_3
+  print "Введите число: "
+  number = gets.to_i
+  result = solve(number)
+  puts "Результат: #{result}"
+end
+
+# Основная программа для вызова методов
+def main
+  puts "Выберите метод для выполнения (1, 2 или 3):"
+  choice = gets.chomp.to_i
+
+  case choice
+  when 1
+    method_1
+  when 2
+    method_2
+  when 3
+    method_3
+  else
+    puts "Неверный выбор. Попробуйте снова."
+  end
+end
+
+main
