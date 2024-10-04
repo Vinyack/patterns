@@ -1,27 +1,28 @@
-# ЗАДАНИЕ 5
 # Метод для поиска минимального элемента в массиве
 def find_min_element(arr)
-	min = arr[0]
-	for i in 1...arr.length
-		if arr[i] < min
-			min = arr[i]
-		end
-	end
-	return min
+  min = arr[0]
+  arr.each do |element|
+    min = element if element < min
+  end
+  min
 end
+
 # Метод для поиска первого положительного элемента в массиве
 def find_first_positive(arr)
-  i = 0
-  while i < arr.length
-    if arr[i] > 0
-      return arr[i]  # Возвращаем первый положительный элемент
-    end
-    i += 1
+  arr.each do |element|
+    return element if element > 0
   end
-  nil  # Возвращаем 0, если положительных элементов не найдено
+  nil  # Возвращаем nil, если положительных элементов не найдено
 end
-# Создаем массив чисел
-numbers = [-5, -10, 0, 3, -1, 7, -3]
+
+# Ввод массива с клавиатуры
+def input_array
+  print "Введите элементы массива через пробел: "
+  gets.chomp.split.map(&:to_i)  # Разбиваем строку на числа
+end
+
+# Основная программа
+numbers = input_array
 
 # Находим минимальный элемент
 min_element = find_min_element(numbers)
