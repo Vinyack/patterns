@@ -1,16 +1,18 @@
-# Метод для поиска минимального элемента в массиве
+# Метод для поиска минимального элемента в массиве с использованием цикла for
 def find_min_element(arr)
   min = arr[0]
-  arr.each do |element|
-    min = element if element < min
+  for i in 1...arr.length
+    min = arr[i] if arr[i] < min
   end
   min
 end
 
-# Метод для поиска первого положительного элемента в массиве
+# Метод для поиска первого положительного элемента в массиве с использованием цикла while
 def find_first_positive(arr)
-  arr.each do |element|
-    return element if element > 0
+  i = 0
+  while i < arr.length
+    return arr[i] if arr[i] > 0
+    i += 1
   end
   nil  # Возвращаем nil, если положительных элементов не найдено
 end
