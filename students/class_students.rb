@@ -13,14 +13,16 @@ class Student
       @email = email
       @git = git
     end
-    # Метод для отображения информации об объекте
-    def to_s
-      info = "ID: #{@id}\nФамилия: #{@last_name}\nИмя: #{@first_name}\nОтчество: #{@middle_name}\n"
-      info += "Телефон: #{@phone}\n" if @phone
-      info += "Telegram: #{@telegram}\n" if @telegram
-      info += "Email: #{@email}\n" if @email
-      info += "GitHub: #{@git}\n" if @git
-      info
+    # Метод для форматированного вывода информации об объекте
+    def display_info
+        puts "ID: #{@id || 'не указан'}"
+        puts "Фамилия: #{@last_name}"
+        puts "Имя: #{@first_name}"
+        puts "Отчество: #{@middle_name}"
+        puts "Телефон: #{@phone || 'не указан'}"
+        puts "Telegram: #{@telegram || 'не указан'}"
+        puts "Email: #{@email || 'не указан'}"
+        puts "GitHub: #{@git || 'не указан'}"
+        puts "-" * 30
     end
-  end
-  
+end
