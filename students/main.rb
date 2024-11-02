@@ -38,3 +38,6 @@ student3.display_info
 # Создание студента через конструктор из строки
 student_from_string = Student.from_string(1, "Иванов И.И.; github.com/ivanov; +79012345678")
 puts student_from_string.inspect  # Выводим объект для проверки
+
+# Вывод краткой информации о студенте
+puts student_from_string.get_info
