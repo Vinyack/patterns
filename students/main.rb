@@ -34,3 +34,7 @@ puts "-" * 30
 student1.display_info
 student2.display_info
 student3.display_info
+
+# Создание студента через конструктор из строки
+student_from_string = Student.from_string(1, "Иванов И.И.; github.com/ivanov; +79012345678")
+puts student_from_string.inspect  # Выводим объект для проверки
