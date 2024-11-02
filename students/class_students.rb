@@ -1,7 +1,7 @@
 class Student
   # Определяем геттеры и сеттеры для всех полей
-  attr_accessor :id, :phone, :telegram, :email, :git
-  attr_reader :last_name, :first_name, :middle_name
+  attr_accessor :id, :telegram, :email, :git
+  attr_reader :last_name, :first_name, :middle_name, :phone
 
   # Конструктор с именованными аргументами
   def initialize(id: nil, last_name:, first_name:, middle_name:, phone: nil, telegram: nil, email: nil, git: nil)
@@ -13,6 +13,7 @@ class Student
     self.telegram = telegram
     self.email = email
     self.git = git
+    @contacts_frozen = false
   end
 
   # Валидация обязательных полей ФИО
@@ -35,16 +36,18 @@ class Student
   end
 
   # Валидация и установка необязательных полей
-
   def phone=(value)
-    @phone = value.nil? || valid_phone?(value) ? value : raise(ArgumentError, "Неверный формат телефона")
+    raise "Невозможно изменить контакты" if contacts_frozen?
+    @phone = value.nil? || Student.valid_phone?(value) ? value : raise(ArgumentError, "Неверный формат телефона")
   end
 
   def telegram=(value)
+    raise "Невозможно изменить контакты" if contacts_frozen?
     @telegram = value.nil? || valid_telegram?(value) ? value : raise(ArgumentError, "Неверный формат Telegram")
   end
 
   def email=(value)
+    raise "Невозможно изменить контакты" if contacts_frozen?
     @email = value.nil? || valid_email?(value) ? value : raise(ArgumentError, "Неверный формат email")
   end
 
@@ -52,16 +55,8 @@ class Student
     @git = value.nil? || valid_git?(value) ? value : raise(ArgumentError, "Неверный формат GitHub")
   end
 
-  # validate 
-
-  def validate
-    if git.nil? || (phone.nil? && telegram.nil? && email.nil?)
-      raise "Ошибка: у студента должен быть либо GitHub, либо хотя бы один контактный метод"
-    end
-  end
-
   # Методы проверки форматов
-  def valid_phone?(phone)
+  def self.valid_phone?(phone)
     phone.match?(/^\+?\d{10,15}$/)
   end
 
@@ -75,6 +70,35 @@ class Student
 
   def valid_git?(git)
     git.match?(/^github\.com\/[\w.-]+$/)
+  end
+
+  # Метод validate для проверки наличия гита и хотя бы одного контакта
+  def validate
+    if git.nil? || (phone.nil? && telegram.nil? && email.nil?)
+      raise "Ошибка: у студента должен быть либо GitHub, либо хотя бы один контактный метод"
+    end
+  end
+
+  # Метод set_contacts для установки контактов и заморозки их значений
+  def set_contacts(phone: nil, telegram: nil, email: nil)
+    @phone = phone if phone && Student.valid_phone?(phone)
+    @telegram = telegram if telegram && valid_telegram?(telegram)
+    @email = email if email && valid_email?(email)
+    
+    @contacts_frozen = true
+    freeze_contacts
+  end
+
+  private
+
+  def freeze_contacts
+    @phone.freeze if @phone
+    @telegram.freeze if @telegram
+    @email.freeze if @email
+  end
+
+  def contacts_frozen?
+    @contacts_frozen
   end
 
   # Метод для отображения информации об объекте
