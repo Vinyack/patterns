@@ -3,16 +3,16 @@ class Student
   attr_accessor :id, :phone, :telegram, :email, :git
   attr_reader :last_name, :first_name, :middle_name
 
-  # Конструктор, использующий хеш параметров
-  def initialize(params = {})
-    @id = params[:id]
-    self.last_name = params[:last_name]
-    self.first_name = params[:first_name]
-    self.middle_name = params[:middle_name]
-    self.phone = params[:phone]
-    self.telegram = params[:telegram]
-    self.email = params[:email]
-    self.git = params[:git]
+  # Конструктор с именованными аргументами
+  def initialize(id: nil, last_name:, first_name:, middle_name:, phone: nil, telegram: nil, email: nil, git: nil)
+    @id = id
+    self.last_name = last_name
+    self.first_name = first_name
+    self.middle_name = middle_name
+    self.phone = phone
+    self.telegram = telegram
+    self.email = email
+    self.git = git
   end
 
   # Валидация обязательных полей ФИО
@@ -50,6 +50,14 @@ class Student
 
   def git=(value)
     @git = value.nil? || valid_git?(value) ? value : raise(ArgumentError, "Неверный формат GitHub")
+  end
+
+  # validate 
+
+  def validate
+    if git.nil? || (phone.nil? && telegram.nil? && email.nil?)
+      raise "Ошибка: у студента должен быть либо GitHub, либо хотя бы один контактный метод"
+    end
   end
 
   # Методы проверки форматов
