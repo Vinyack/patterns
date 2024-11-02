@@ -150,4 +150,13 @@ class Student
     " Телефон: #{@phone || 'не указан'}, Telegram: #{@telegram || 'не указан'}," \
     " Email: #{@email || 'не указан'}, GitHub: #{@git || 'не указан'}"
   end
+  # Метод getInfo для краткой информации
+  def get_info
+    "#{last_name} #{first_name[0]}.#{middle_name[0]}.; Git: #{git || 'не указан'}; Контакт: #{contact_info || 'не указан'}"
+  end
+
+  # Метод для получения любого доступного контакта
+  def contact_info
+    phone || telegram || email
+  end  
 end
