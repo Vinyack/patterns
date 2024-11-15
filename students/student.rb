@@ -1,151 +1,78 @@
-class student
-    attr_accessor :id, :last_name, :name, :otchestvo, :telegram, :email, :github
-    attr_reader :phone, :id
-
-    # Создаём метод класса для проверки номера
-
-    # Валидация
-
-    def self.valid_number?(phone)
-        phone.is_a?(String) && phone.match?(/\A\+d{11}\z/)
+class Student < Person
+    attr_accessor :last_name, :first_name, :middle_name, :telegram, :email, :github
+    attr_reader :phone
+  
+    def initialize(id:, last_name:, first_name:, middle_name: nil, phone: nil, telegram: nil, email: nil, github: nil)
+      super(id: id)
+      @last_name = last_name
+      @first_name = first_name
+      @middle_name = middle_name
+      self.phone = phone
+      self.telegram = telegram
+      self.email = email
+      self.github = github
+      validate
     end
-
-    def self.valid_id?(id)
-        id.is_a?(Integer) && id > 0
+  
+    # Сеттер с валидацией для телефона
+    def phone=(phone)
+      raise "Неверный формат номера телефона" unless phone.nil? || Person.valid_phone?(phone)
+      @phone = phone
     end
-
-    def self.valid_name?(name)
-        name.is_a?(String) && name.match?(/\A[а-яА-Яa-zA-Z]+\z/)
+  
+    # Сеттер с валидацией для Telegram
+    def telegram=(telegram)
+      raise "Неверный формат Telegram" unless Person.valid_telegram?(telegram)
+      @telegram = telegram
     end
-
-    def self.valid_telegram?(telegram)
-        telegram.nil? || (telegram.is_a?(String) && telegram.match?(/\A@[\w]+\z/))
+  
+    # Сеттер с валидацией для Email
+    def email=(email)
+      raise "Неверный формат Email" unless Person.valid_email?(email)
+      @e_mail = email
     end
-
-    def self.valid_email?(email)
-        email.nil? || (email.is_a?(String) && email.match?(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i))
-    end
-
-    def self.valid_github?(github)
-        github.nil? || (github.is_a?(String) && github.match?(/\Ahttps:\/\/github\.com\/\w+/))
-    end
-
-    # Конструктор, вызывается автоматически при создании объекта с помощью ClassName.new, его задача инициализировать объект и задать начальные значения для его переменных экземпляра.
-
-    def initialize(id: 1, last_name:, first_name:, middle_name: nil, phone: nil, telegram: nil, email: nil, github: nil)
-        self.id = id
-        self.last_name = last_name
-        self.first_name = first_name
-        self.middle_name = middle_name
-        self.phone = phone
-        self.telegram = telegram
-        self.email = email
-        self.github = github
-      end 
-
-    # set_contacts
-
-    def set_contacts(telegram: nil, email:nil, phone:nil)
-        if phone && !Student.valid_phone?(phone)
-            raise "Неверный формат номера телефона"
-        end
-      
-        if telegram && !Student.valid_telegram?(telegram)
-            raise "Неверный формат Telegram"
-        end
-      
-        if email && !Student.valid_email?(email)
-            raise "Неверный формат Email"
-        end
-          @phone = phone unless phone.nil?
-          @telegram = telegram unless telegram.nil?
-          @email = email unless email.nil?
-    end
-
-
-    # Сеттеры с валидацией
-
-    def id=(id)
-        raise "ID должен быть положительным числом" unless Student.valid_id?(id)
-        @id = id
-    end
-
-    def last_name=(last_name)
-        aise "Фамилия должна содержать только буквы" unless Student.valid_name?(last_name)
-        @last_name = last_name
-    end
-
-    def first_name=(first_name)
-        raise "Имя должно содержать только буквы" unless Student.valid_name?(first_name)
-        @first_name = first_name
-    end
-
-    def middle_name=(middle_name)
-        if middle_name && !Student.valid_name?(middle_name)
-            raise "Отчество должно содержать только буквы или быть пустым"
-        end
-        @middle_name = middle_name
-    end
-
+  
+    # Сеттер с валидацией для GitHub
     def github=(github)
-        raise "GitHub должен начинаться с https://github.com/" unless Student.valid_github?(github)
-        @github = github
+      raise "Неверный формат GitHub" unless Person.valid_github?(github)
+      @github = github
     end
-    
-    def has_any_contact?
-        !@telegram.nil? || !@phone.nil? || !@email.nil?
-    end
-    
-    def has_git?
-        !@github.nil? || !@github.empty?
-    end
-
-    # Валидация для проверки наличия гита и любого контакта для связи
-
-    def validate
-        raise "Github аккаунт обязателен!" unless has_git?
-        raise "Контакты для связи - необходимы!" unless has_any_contact?
-        true
-    end
-
-    def to_s
-        info = "ID: #{@id}\n"
-        info += "Фамилия #{@last_name}\n"
-        info += "Имя #{@name}\n"
-        info += "Отчество #{@middle_name}\n"
-        info += "Номер #{@phone || 'Не указано'}\n"
-        info += "Телеграм #{@telegram || 'Не указано'}\n"
-        info += "Почта #{@email || 'Не указано'}\n"
-        info += "Гит #{@git || 'Не указано'}\n"
-        info
-    end
+  
     # Метод для получения фамилии и инициалов
     def short_name
-        initials = "#{@first_name[0].upcase}." # Инициал имени
-        initials += "#{@middle_name[0].upcase}." if @middle_name # Инициал отчества, если есть
-        "#{@last_name} #{initials}"
+      initials = "#{@first_name[0].upcase}."
+      initials += "#{@middle_name[0].upcase}." if @middle_name
+      "#{@last_name} #{initials}"
     end
-
-    # Метод для получения контакта
+  
+    # Метод для получения основного контакта
     def primary_contact
-        if @phone
-            "Телефон: #{@phone}"
-        elsif @telegram
-            "Telegram: #{@telegram}"
-        elsif @e_mail
-            "Email: #{@e_mail}"
-        else
-            "Контакт отсутствует"
-        end
+      if @phone
+        "Телефон: #{@phone}"
+      elsif @telegram
+        "Telegram: #{@telegram}"
+      elsif @e_mail
+        "Email: #{@e_mail}"
+      else
+        "Контакт отсутствует"
+      end
     end
-
+  
     # Метод для получения GitHub
     def git_info
-        @github || "GitHub не указан"
+      @github || "GitHub не указан"
     end
-
+  
     # Метод getInfo: возвращает краткую информацию
     def getInfo
-        "#{short_name}; #{git_info}; #{primary_contact}"
+      "#{short_name}; #{git_info}; #{primary_contact}"
     end
-end
+  
+    # Метод для установки контактов
+    def set_contacts(phone: nil, telegram: nil, email: nil)
+      self.phone = phone unless phone.nil?
+      self.telegram = telegram unless telegram.nil?
+      self.email = email unless email.nil?
+    end
+  end
+  
