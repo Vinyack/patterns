@@ -32,7 +32,7 @@ class student
 
     # Конструктор, вызывается автоматически при создании объекта с помощью ClassName.new, его задача инициализировать объект и задать начальные значения для его переменных экземпляра.
 
-    def initialize(id: 1, last_name:, name:,phone:nil,telegram:nil,email:nil,git:nil)
+    def initialize(id: 1, last_name:, first_name:, middle_name: nil, phone: nil, telegram: nil, email: nil, github: nil)
         self.id = id
         self.last_name = last_name
         self.first_name = first_name
@@ -41,7 +41,8 @@ class student
         self.telegram = telegram
         self.email = email
         self.github = github
-    end
+      end
+      
 
     # set_contacts
 
