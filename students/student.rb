@@ -1,13 +1,13 @@
 class student
-    attr_accessor :id, :last_name, :name, :otchestvo, :tg, :mail, :github
-    attr_reader :phone_number, :id
+    attr_accessor :id, :last_name, :name, :otchestvo, :telegram, :email, :github
+    attr_reader :phone, :id
 
     # Создаём метод класса для проверки номера
 
     # Валидация
 
-    def self.valid_number?(phone_number)
-        phone_number.is_a?(String) && phone_number.match?(/\A\+d{11}\z/)
+    def self.valid_number?(phone)
+        phone.is_a?(String) && phone.match?(/\A\+d{11}\z/)
     end
 
     def self.valid_id?(id)
@@ -32,7 +32,7 @@ class student
 
     # Конструктор, вызывается автоматически при создании объекта с помощью ClassName.new, его задача инициализировать объект и задать начальные значения для его переменных экземпляра.
 
-    def initialize(id: 1, last_name:, name:,number:nil,tg:nil,mail:nil,git:nil)
+    def initialize(id: 1, last_name:, name:,phone:nil,telegram:nil,email:nil,git:nil)
         self.id = id
         self.last_name = last_name
         self.first_name = first_name
@@ -42,6 +42,26 @@ class student
         self.email = email
         self.github = github
     end
+
+    # set_contacts
+
+    def set_contacts(telegram: nil, email:nil, phone:nil)
+        if phone && !Student.valid_phone?(phone)
+            raise "Неверный формат номера телефона"
+        end
+      
+        if telegram && !Student.valid_telegram?(telegram)
+            raise "Неверный формат Telegram"
+        end
+      
+        if email && !Student.valid_email?(email)
+            raise "Неверный формат Email"
+        end
+          @phone = phone unless phone.nil?
+          @telegram = telegram unless telegram.nil?
+          @email = email unless email.nil?
+    end
+
 
     # Сеттеры с валидацией
 
@@ -67,31 +87,13 @@ class student
         @middle_name = middle_name
     end
 
-    def phone_number=(phone_number)
-        if phone_number.nil? || Student.valid_phone?(phone_number)
-        @phone_number = phone_number
-        else
-        raise "Неверный формат номера телефона: #{phone_number}. Должен быть в формате +12345678901."
-        end
-    end
-
-    def telegram=(telegram)
-        raise "Telegram должен начинаться с @" unless Student.valid_telegram?(telegram)
-        @telegram = telegram
-    end
-
-    def email=(email)
-        raise "Неверный формат email" unless Student.valid_email?(email)
-        @email = email
-    end
-
     def github=(github)
         raise "GitHub должен начинаться с https://github.com/" unless Student.valid_github?(github)
         @github = github
     end
     
     def has_any_contact?
-        !@telegram.nil? || !@phone.nil? || !@mail.nil?
+        !@telegram.nil? || !@phone.nil? || !@email.nil?
     end
     
     def has_git?
@@ -111,9 +113,9 @@ class student
         info += "Фамилия #{@last_name}\n"
         info += "Имя #{@name}\n"
         info += "Отчество #{@middle_name}\n"
-        info += "Номер #{@number || 'Не указано'}\n"
-        info += "Телеграм #{@tg || 'Не указано'}\n"
-        info += "Почта #{@mail || 'Не указано'}\n"
+        info += "Номер #{@phone || 'Не указано'}\n"
+        info += "Телеграм #{@telegram || 'Не указано'}\n"
+        info += "Почта #{@email || 'Не указано'}\n"
         info += "Гит #{@git || 'Не указано'}\n"
         info
     end
