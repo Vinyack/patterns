@@ -41,8 +41,7 @@ class student
         self.telegram = telegram
         self.email = email
         self.github = github
-      end
-      
+      end 
 
     # set_contacts
 
@@ -119,5 +118,34 @@ class student
         info += "Почта #{@email || 'Не указано'}\n"
         info += "Гит #{@git || 'Не указано'}\n"
         info
+    end
+    # Метод для получения фамилии и инициалов
+    def short_name
+        initials = "#{@first_name[0].upcase}." # Инициал имени
+        initials += "#{@middle_name[0].upcase}." if @middle_name # Инициал отчества, если есть
+        "#{@last_name} #{initials}"
+    end
+
+    # Метод для получения контакта
+    def primary_contact
+        if @phone
+            "Телефон: #{@phone}"
+        elsif @telegram
+            "Telegram: #{@telegram}"
+        elsif @e_mail
+            "Email: #{@e_mail}"
+        else
+            "Контакт отсутствует"
+        end
+    end
+
+    # Метод для получения GitHub
+    def git_info
+        @github || "GitHub не указан"
+    end
+
+    # Метод getInfo: возвращает краткую информацию
+    def getInfo
+        "#{short_name}; #{git_info}; #{primary_contact}"
     end
 end
