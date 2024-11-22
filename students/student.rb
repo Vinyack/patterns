@@ -2,10 +2,17 @@ class Student < Person
 
   attr_reader :phone, :telegram, :email
 
-  def initialize(id: nil, first_name:, last_name:, middle_name:, git: nil, phone: nil, telegram: nil, email: nil)
+  def initialize(id: nil, first_name:, last_name:, middle_name:, github: nil, phone: nil, telegram: nil, email: nil)
     set_contacts(phone: phone, telegram: telegram, email: email)
-    super(first_name: first_name, last_name: last_name, middle_name: middle_name, git: git, id: id, contact: primary_contact)
-  end
+    super(
+      id: id,
+      first_name: first_name,
+      last_name: last_name,
+      middle_name: middle_name,
+      github: github,
+      contact: primary_contact
+    )
+  end  
 
   # Сеттер с валидацией для телефона
   private def phone=(phone)
@@ -22,7 +29,7 @@ class Student < Person
   # Сеттер с валидацией для Email
   private def email=(email)
     raise "Неверный формат Email" unless Person.valid_email?(email)
-    @e_mail = email
+    @email = email
   end
 
   # Сеттер с валидацией для GitHub
@@ -44,8 +51,8 @@ class Student < Person
       "Телефон: #{@phone}"
     elsif @telegram
       "Telegram: #{@telegram}"
-    elsif @e_mail
-      "Email: #{@e_mail}"
+    elsif @email
+      "Email: #{@email}"
     else
       nil
     end
@@ -58,13 +65,17 @@ class Student < Person
 
   # Метод getInfo: возвращает краткую информацию
   def getInfo
-    "#{short_name}; #{git_info}; #{primary_contact}"
+    "#{short_name}; #{git_info || 'Нет GitHub'}; #{primary_contact || 'Нет контакта'}"
   end
 
   # Метод для установки контактов
   def set_contacts(phone: nil, telegram: nil, email: nil)
-    self.phone = phone unless phone.nil?
-    self.telegram = telegram unless telegram.nil?
-    self.email = email unless email.nil?
+    raise "Неверный формат номера телефона" unless phone.nil? || Person.valid_phone?(phone)
+    raise "Неверный формат Telegram" unless telegram.nil? || Person.valid_telegram?(telegram)
+    raise "Неверный формат Email" unless email.nil? || Person.valid_email?(email)
+  
+    @phone = phone
+    @telegram = telegram
+    @email = email
   end
 end
