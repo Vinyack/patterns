@@ -1,37 +1,16 @@
 class Student < Person
-  attr_reader :phone, :last_name, :first_name, :middle_name, :telegram, :email, :github
 
-  def initialize(id:, last_name:, first_name:, middle_name:, phone: nil, telegram: nil, email: nil, github: nil)
-    super(id: id)
-    self.last_name = last_name
-    self.first_name = first_name
-    self.middle_name = middle_name
+  attr_reader :phone, :telegram, :email
+
+  def initialize(id: nil, first_name:, last_name:, middle_name:, git: nil, phone: nil, telegram: nil, email: nil)
     set_contacts(phone: phone, telegram: telegram, email: email)
-    self.github = github if github
+    super(first_name: first_name, last_name: last_name, middle_name: middle_name, git: git, id: id, contact: primary_contact)
   end
 
   # Сеттер с валидацией для телефона
   private def phone=(phone)
     raise "Неверный формат номера телефона" unless phone.nil? || Person.valid_phone?(phone)
     @phone = phone
-  end
-  
-  # Сеттер для имени
-
-  def last_name=(last_name)
-    @last_name=last_name if valid_name?(last_name)
-  end
-
-  def first_name=(first_name)
-    @first_name=first_name if valid_name?(first_name)
-  end
-
-  def middle_name=(middle_name)
-    @middle_name=middle_name if valid_name?(middle_name)
-  end
-  # Валидация для имени
-  def self.valid_name?(name)
-      name.is_a?(String) && name.match?(/\A[а-яА-Яa-zA-Z]+\z/)
   end
 
   # Сеттер с валидацией для Telegram

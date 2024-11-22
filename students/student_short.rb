@@ -1,5 +1,4 @@
-class StudentShort < Person
-    attr_reader :last_name_initials, :github, :contact
+class StudentShort < Person 
   
     def initialize(id:, last_name_initials:, github:, contact:)
         super(id: id)

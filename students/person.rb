@@ -1,9 +1,14 @@
 class Person
-    attr_reader :id
+    attr_reader :id, :first_name, :middle_name, :last_name, :github
   
-    def initialize(id:)
-      @id = id
-      validate_id
+    def initialize(id:, last_name:, first_name:, middle_name:, contact: nil, id: nil, github: nil)
+      super(id: id)
+      self.last_name = last_name
+      self.first_name = first_name
+      self.middle_name = middle_name
+      self.contact = contact if contact
+      self.id = id if id
+      self.github = github if github
     end
   
     # Валидация ID
@@ -12,19 +17,48 @@ class Person
     end
   
     # Метод для проверки наличия контактов
-    def has_any_contact?
+    def contact?
       !@telegram.nil? || !@phone.nil? || !@e_mail.nil?
     end
-  
-    # Метод для проверки наличия GitHub
-    def has_git?
-      !@github.nil? && !@github.empty?
+
+    def last_name=(last_name)
+      @last_name=last_name if valid_name?(last_name)
     end
   
+    def first_name=(first_name)
+      @first_name=first_name if valid_name?(first_name)
+    end
+  
+    def middle_name=(middle_name)
+      @middle_name=middle_name if valid_name?(middle_name)
+    end
+    # Валидация для имени
+    def self.valid_name?(name)
+        name.is_a?(String) && name.match?(/\A[а-яА-Яa-zA-Z]+\z/)
+    end
+
+    # Сеттер с валидацией для GitHub
+    def github=(github)
+        raise "Неверный формат GitHub" unless Person.valid_github?(github)
+        @github = github
+    end
+    # Метод для проверки наличия GitHub
+    def has_git?
+        !@github.nil? && !@github.empty?
+    end
+    
+    def validate_contact
+      contact_null?
+      
+
+    protected def contact=(value)
+      @contact = value
+    end
+
     # Общая валидация для подклассов
     def validate
       raise "GitHub аккаунт обязателен!" unless has_git?
-      raise "Необходимо указать хотя бы один контакт для связи!" unless has_any_contact?
+      raise "Необходимо указать хотя бы один контакт для связи!" unless contact?
     end
   
     # Методы класса для проверки форматов
@@ -42,6 +76,21 @@ class Person
   
     def self.valid_github?(github)
       github.nil? || (github.is_a?(String) && github.match?(/\Ahttps:\/\/github\.com\/\w+/))
+    end
+
+    # Метод для получения инициалов (Фамилия И.О.)
+    def short_name
+      "#{last_name} #{first_name[0]}.#{middle_name[0]}."
+    end
+
+    def to_s
+      str = []
+      str << "ID: #{id}" if @id
+      str << "Фамилия: #{last_name}"
+      str << "Имя: #{first_name}"
+      str << "Отчество: #{middle_name}"
+      str << "GitHub: #{github}" if @github
+      str.join("; ")
     end
   end
   
