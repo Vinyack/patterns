@@ -62,7 +62,20 @@ class Student < Person
   def git_info
     @github
   end
-
+  
+    def to_s
+      str = []
+      str << "ID: #{@id}" if @id
+      str << "Firstname: #{@first_name}"
+      str << "Surname: #{@last_name}"
+      str << "Lastname: #{@middle_name}"
+      str << "Birthdate: #{@birthdate}"
+      str << "Phone: #{@phone}" if phone
+      str << "Telegram: #{@telegram}" if telegram
+      str << "Email: #{@email}" if email
+      str << "GitHub: #{@github}" if github
+      str.join('; ')
+    end
   # Метод getInfo: возвращает краткую информацию
   def getInfo
     "#{short_name}; #{git_info || 'Нет GitHub'}; #{primary_contact || 'Нет контакта'}"
