@@ -31,7 +31,8 @@ class StudentShort < Person
             contact: data[2]
         )
     end
-  
+    # Закрываем метод new
+    private_class_method  :new
     # Вывод информации
     def to_s
         "ID: #{@id}, ФИО: #{@last_name_initials}, GitHub: #{@github}, Контакт: #{@contact}"
