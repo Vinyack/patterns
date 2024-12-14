@@ -3,7 +3,7 @@ require_relative 'student'
 require_relative 'person'
 require_relative 'student_short'
 # Создание экземпляров класса
-student_example = Student.new(
+student_me = Student.new(
 	id: 1,
 	last_name: "Дерябин",
 	first_name: "Андрей",
@@ -12,7 +12,7 @@ student_example = Student.new(
 	telegram: "@vinyack",
 	git: "github.com/vinyack"
 	)
-student_me = Student.new(
+student_friend1 = Student.new(
 	id: 2,
 	last_name: "Пшеничнов",
 	first_name: "Андрей",
@@ -20,7 +20,7 @@ student_me = Student.new(
 	email: "pshen@gmail.com",
 	git: "github.com/littleblb"
 	)
-student_valya = Student.new(
+student_friend2 = Student.new(
 	id: 3,
 	last_name: "Дука",
 	first_name: "Виталий",
