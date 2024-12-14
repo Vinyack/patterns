@@ -1,52 +1,52 @@
-# Подключаем классы
-require_relative 'person'
+#Подключаем класс студентов из отдельного файла
 require_relative 'student'
+require_relative 'person'
 require_relative 'student_short'
+# Создание экземпляров класса
+student_example = Student.new(
+	id: 1,
+	last_name: "Дерябин",
+	first_name: "Андрей",
+	middle_name: "Викторович", 
+	phone: 89621231212,
+	telegram: "@vinyack",
+	git: "github.com/vinyack"
+	)
+student_me = Student.new(
+	id: 2,
+	last_name: "Пшеничнов",
+	first_name: "Андрей",
+	middle_name: "Александрович", 
+	email: "pshen@gmail.com",
+	git: "github.com/littleblb"
+	)
+student_valya = Student.new(
+	id: 3,
+	last_name: "Дука",
+	first_name: "Виталий",
+	middle_name: "Андреевич", 
+	phone: 88001231231 ,
+	telegram: "@sdnezz"
+	)
+#Вызываем метод вывода информации об объекте класса на экран
+puts student_example
+#Изменяем контакты, только обращаясь к методу объекта класса для них
+student_example.set_contacts(phone: 89998887766, email: "new_email@example.com")
+puts student_example
+#Проверяем наличие гита и контактов
+student_example.validate_git_and_contact
 
-  # Основная функция
-  def main
-    begin
-    # Создание объекта Student
-      student = Student.new(
-      id: 1,
-      last_name: "Иванов",
-      first_name: "Иван",
-      middle_name: "Иванович",
-      phone: "+79123456789",
-      telegram: "@ivanov",
-      email: "ivanov@example.com",
-      github: "https://github.com/ivanov"
-      )
+#Выводим гит,инициалы и контакты через отдельные методы объекта класса
 
+puts student_example.short_name
+puts student_example.short_info
+puts student_example.contact_info
 
-      # Вывод информации о студенте
-      puts "Информация о студенте:"
-      puts student.getInfo
-      puts
+#Выводим краткую информацию через метод объекта класса
+puts student_example.get_info
 
-      # Изменение контактов
-      student.set_contacts(phone: "+79211234567", email: "new_email@example.com")
-      puts "Информация о студенте после изменения контактов:"
-      puts student.getInfo
-      puts
-
-      # Создание объекта StudentShort из Student
-      student_short = StudentShort.from_student(student)
-      puts "Информация о кратком объекте StudentShort:"
-      puts student_short
-      puts
-
-      # Создание объекта StudentShort из строки
-      info_string = "Иванов И.И.; https://github.com/ivanov; Телефон: +79211234567"
-      student_short_from_string = StudentShort.from_string(2, info_string)
-      puts "Информация о кратком объекте StudentShort из строки:"
-      puts student_short_from_string
-      puts
-
-      rescue StandardError => e
-      puts "Ошибка: #{e.message}"
-    end
-  end
-
-# Вызов метода main
-main
+#Создаем объект класса с краткой информацией, передавая туда уже созданный объект другого класса
+student_example_short = StudentShort.new_from_student(student_example)
+puts student_example_short
+student_example_short_2 = StudentShort.new_from_string(id: 2, str: "Иванов И.И.; github.com/ivan; ivan@example.com")
+puts student_example_short_2

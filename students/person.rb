@@ -1,93 +1,99 @@
+require_relative 'person'
 class Person
-  attr_reader :id, :first_name, :middle_name, :last_name, :github
+  attr_reader :id, :first_name, :last_name, :middle_name, :git, :contact
 
-  def initialize(id:, last_name:, first_name:, middle_name:, contact: nil, github: nil)
-    self.last_name = last_name
+  # Конструктор
+  def initialize(id: nil, first_name:, last_name:, middle_name:, git: nil, contact: nil)
     self.first_name = first_name
+    self.last_name = last_name
     self.middle_name = middle_name
-    self.contact = contact if contact
+    self.git = git if git
     self.id = id if id
-    self.github = github if github
+    self.contact = contact if contact
   end
 
-  # Валидация ID
-  def id=(id)
-    raise "ID должен быть положительным числом" unless id.is_a?(Integer) && id > 0
-    @id = id
+  # Сеттер для id с валидацией
+  def id=(value)
+    raise ArgumentError, "Неверный ID: #{value}" unless Person.id_valid?(value)
+    @id = value
   end
 
-  # Метод для проверки наличия контактов
-  def contact?
-    !@contact.nil? && !@contact.empty?
+  # Валидация-предикат для id
+  def self.id_valid?(id)
+    id.to_s.match?(/^\d+$/)
   end
 
-  def last_name=(last_name)
-    @last_name = last_name if Person.valid_name?(last_name)
+  # Сеттер для git с валидацией
+  def git=(value)
+    raise ArgumentError, "Неверный Git: #{value}" unless Person.git_valid?(value)
+    @git = value
   end
 
-  def first_name=(first_name)
-    @first_name = first_name if Person.valid_name?(first_name)
+  # Валидация-предикат для GitHub
+  def self.git_valid?(git)
+    git.match?(/^github\.com\/[\w.-]+$/)
+  end
+  
+  # Сеттер для first_name с валидацией
+  def first_name=(value)
+    validate_name(:first_name, value)
+    @first_name = value
   end
 
-  def middle_name=(middle_name)
-    @middle_name = middle_name if Person.valid_name?(middle_name)
+  # Сеттер для last_name с валидацией
+  def last_name=(value)
+    validate_name(:last_name, value)
+    @last_name = value
+  end
+  
+  # Сеттер для middle_name с валидацией
+  def middle_name=(value)
+    validate_name(:middle_name, value)
+    @middle_name = value
   end
 
-  # Валидация для имени
-  def self.valid_name?(name)
-    name.is_a?(String) && name.match?(/\A[а-яА-Яa-zA-Z]+\z/)
+  # Валидация имени, фамилии и отчества
+  def validate_name(field, value)
+    raise ArgumentError, "Неверное значение для #{field}: #{value}" unless Person.name_valid?(value)
   end
 
-  # Сеттер с валидацией для GitHub
-  def github=(github)
-    raise "Неверный формат GitHub" unless Person.valid_github?(github)
-    @github = github
+  # Предикат для валидация имени, фамилии и отчества
+  def self.name_valid?(name)
+    name.match?(/^[А-ЯЁA-Z][а-яёa-z-]+$/)
   end
 
-  # Метод для проверки наличия GitHub
-  def has_git?
-    !@github.nil? && !@github.empty?
+  def git_null?
+    self.git.nil?
+  end
+
+  def contact_null?
+    self.contact.nil?
   end
 
   protected def contact=(value)
     @contact = value
   end
 
-  # Общая валидация для подклассов
-  def validate
-    raise "GitHub аккаунт обязателен!" unless has_git?
-    raise "Необходимо указать хотя бы один контакт для связи!" unless contact?
+  def validate_git_and_contact
+    git_null? && contact_null?
   end
 
-  # Методы класса для проверки форматов
-  def self.valid_phone?(phone)
-    phone.is_a?(String) && phone.match?(/\A\+\d{11}\z/)
-  end
-
-  def self.valid_telegram?(telegram)
-    telegram.nil? || (telegram.is_a?(String) && telegram.match?(/\A@[\w]+\z/))
-  end
-
-  def self.valid_email?(email)
-    email.nil? || (email.is_a?(String) && email.match?(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i))
-  end
-
-  def self.valid_github?(github)
-    github.nil? || (github.is_a?(String) && github.match?(/\Ahttps:\/\/github\.com\/\w+/))
-  end
-
-  # Метод для получения инициалов (Фамилия И.О.)
+  # Метод для получения инициалов в формате: Фамилия И.О.
   def short_name
     "#{last_name} #{first_name[0]}.#{middle_name[0]}."
   end
 
+  def git_info
+    self.git
+  end  
+
   def to_s
     str = []
-    str << "ID: #{id}" if id
+    str << "ID: #{id}" if @id
     str << "Фамилия: #{last_name}"
     str << "Имя: #{first_name}"
     str << "Отчество: #{middle_name}"
-    str << "GitHub: #{github}" if github
+    str << "GitHub: #{git}" if @git
     str.join("; ")
   end
 end
