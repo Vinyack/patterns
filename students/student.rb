@@ -85,6 +85,6 @@ end
 
   # Метод для создания краткой информации о студенте
   def short_info
-    "id: #{@id}; Фамилия: #{@firstname}; Имя: #{@last_name}; Отчество: #{@middle_name}; git: #{@git}; #{@contact}"
+    "id: #{@id}; Фамилия: #{@first_name}; Имя: #{@last_name}; Отчество: #{@middle_name}; git: #{@git}; #{@contact}"
   end
 end

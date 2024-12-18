@@ -33,12 +33,7 @@ class StudentShort < Person
     # Закрываем метод new
     private_class_method  :new
     # Переопределение метода и вывод информации
-    def to_s
-        str = []
-        str << "ID: #{@id}" if @id
-        str << "Фамилия И.О.: #{@last_name_initials}"
-        str << "GitHub: #{@git}" if @git
-        str << "#{@contact}" if @contact
-        str.join("; ")
-    end
+  def to_s
+    ["ID: #{@id}", "Фамилия И.О.: #{@last_name_initials}", "GitHub: #{@git}", @contact].compact.join("; ")
+  end
 end
