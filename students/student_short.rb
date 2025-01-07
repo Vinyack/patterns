@@ -1,30 +1,35 @@
 require_relative 'person'
-require_relative 'student'
-
 class Student_short
 
 attr_reader :id, :git, :contact, :short_name
 
 private_class_method :new
 
+	def initialize(id:, git:, contact:, short_name:)
+		@id = id
+		@git = git
+		@contact = contact
+		@short_name = short_name
+	end
+  
 	def self.from_student(student)
 		new(
 			id: student.id,
 			git: student.git,
-			initials: student.short_name,
-			contact: student.contact
+			short_name: student.short_name,
+			contact: student.contact_info
 		)
 	end
 	
 	# Метод для создания объекта на основе строки
 	
 	def self.split_str_params(str)
-		str.split('; ')  # Разделяем строку по символу ";" c пробелом
+		str.split('; ')
 	end
 	
 	def self.from_string(id:, str:)
 		init = {}
-		parametrs = split_str_parametrs(str)
+		parametrs = split_str_params(str)
 		init[:id] = id
 		init[:short_name] = parametrs[0]
 		init[:git] = parametrs[1]
@@ -32,4 +37,12 @@ private_class_method :new
 		self.new(**init)
 	end
 	
+	def to_s
+		str = []
+		str << "ID: #{@id}" if @id
+		str << "Фамилия И.О.: #{@short_name}"
+		str << "GitHub: #{@git}" if @git
+		str << "#{@contact}" if @contact
+		str.join("; ")
 	end
+end
