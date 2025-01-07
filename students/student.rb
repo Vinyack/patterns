@@ -3,24 +3,19 @@ require_relative 'person'
 class Student
 
 attr_reader :phone, :email, :tg
-attr_accessor :id
 
-	def initialize(second_name:, first_name:, last_name:, id: nil, email: nil, phone: nil, git: nil, tg: nil)
+	def initialize(second_name:, first_name:, surname:, id: nil, email: nil, phone: nil, git: nil, tg: nil)
 		@id = id
 		set_contacts(phone: phone, email: email, tg: tg)
-		super(second_name: second_name, first_name: first_name, last_name: last_name, git: git, id: id, contact: contact_info)
+		super(second_name: second_name, first_name: first_name, surname: surname, git: git, id: id, contact: contact)
 	end
 	
 	# Краткая информация о студенте
 
-	def get_info
-		"#{short_name}; Гит: #{git || 'Не указан'}; Связь: #{contact}"
-	end
-	
 	def contact_info
 	  if @phone
 	    "Телефон: #{@phone}"
-	  elsif @telegram
+	  elsif @tg
 	    "Телеграм: #{@tg}"
 	  elsif @email
 	    "Почта: #{@email}"
@@ -29,10 +24,23 @@ attr_accessor :id
 	  end
 	end
 	
-	# Метод для получения ФИО с инициалами
+	def set_contacts(email, phone, tg)
+		self.email = email if email
+		self.phone = phone if phone
+		self.tg = tg if tg
+		self.contact = contact_info
+	end
 	
-	def short_name
-		"#{second_name} #{first_name[0]}.#{last_name[0]}."
+	def has_any_contact?
+		!!(@phone || @email || @tg)
+	end
+	
+	def has_git?
+		!!@git
+	end
+	
+	def validate
+		has_any_contact? && has_git?
 	end
 	
 	# Методы для возврата отдельных значений
@@ -49,26 +57,6 @@ attr_accessor :id
 		short_name
 	end
 
-	def has_any_contact?
-		!!(@phone || @email || @tg)
-	end
-	
-	def has_git?
-		!!@git
-	end
-	
-	def validate
-		raise "Должен быть указан хотя бы один контакт для связи" unless has_any_contact?
-		raise "Отсутствует ссылка на GitHub" unless has_git?
-		true
-	end
-	
-	def set_contacts(email, phone, tg)
-		self.email = email if email
-		self.phone = phone if phone
-		self.tg = tg if tg
-	end
-	
 	# Валидация полей
 	
 	def self.phone_valid?(phone)
@@ -83,7 +71,6 @@ attr_accessor :id
 		tg.match?(/\A@[\w\d_]{5,32}\z/)
 	end
 	
-	
 	private def email=(email)
 		if email.nil? || Student.email_valid?(email)
 			@email = email
@@ -91,8 +78,6 @@ attr_accessor :id
 			raise ArgumentError, "Некорректный email: #{email}"
 		end
 	end
-	
-	
 	
 	private def phone=(phone)
 		if phone.nil? || Student.phone_valid?(phone)
