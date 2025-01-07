@@ -1,52 +1,45 @@
-#Подключаем класс студентов из отдельного файла
 require_relative 'student'
-require_relative 'person'
-require_relative 'student_short'
-# Создание экземпляров класса
-student_me = Student.new(
-	id: 1,
-	last_name: "Дерябин",
-	first_name: "Андрей",
-	middle_name: "Викторович", 
-	phone: 89621231212,
-	telegram: "@vinyack",
-	git: "github.com/vinyack"
-	)
-student_friend1 = Student.new(
-	id: 2,
-	last_name: "Пшеничнов",
-	first_name: "Андрей",
-	middle_name: "Александрович", 
-	email: "pshen@gmail.com",
-	git: "github.com/littleblb"
-	)
-student_friend2 = Student.new(
-	id: 3,
-	last_name: "Дука",
-	first_name: "Виталий",
-	middle_name: "Андреевич", 
-	phone: 88001231231 ,
-	telegram: "@sdnezz"
-	)
-#Вызываем метод вывода информации об объекте класса на экран
-puts student_example
-#Изменяем контакты, только обращаясь к методу объекта класса для них
-student_example.set_contacts(phone: 89998887766, email: "new_email@example.com")
-puts student_example
-#Проверяем наличие гита и контактов
-student_example.validate_git_and_contact
 
-#Выводим гит,инициалы и контакты через отдельные методы объекта класса
+student1 = Student.new(
+  "Дерябин",
+  "Андрей",
+  "Викторович",
+  phone: "+79999999999",
+  tg: "@vinyack",
+  email: "vinyackofficial@gmail.com"
+)
 
-puts student_example.short_name
-puts student_example.short_info
-puts student_example.contact_info
+student2 = Student.new(
+  "Дерябин",
+  "Андрей",
+  "Викторович",
+  tg: "@vinyack123",
+  email: "vinyackofficial123@gmail.com"
+)
 
-#Выводим краткую информацию через метод объекта класса
-puts student_example.get_info
+student1.display_info
+student2.display_info
 
-#Создаем объект класса с краткой информацией, передавая туда уже созданный объект другого класса
-student_example_short = StudentShort.new_from_student(student_example)
-puts student_example_short
-student_example_short_2 = StudentShort.new_from_string(id: 2, str: "Иванов И.И.; github.com/ivan; ivan@example.com")
-puts student_example_short_2
+# Пример строки с полными данными
+data1 = "Иванов, Иван, Иванович, +79991234567, ivanov@example.com, https://github.com/ivanov, @ivanov"
+student3 = Student.from_string(data1)
+
+# Пример строки с минимальными данными (только ФИО)
+data2 = "Петров, Петр, Петрович"
+student4 = Student.from_string(data2)
+
+# Пример строки с частичными данными
+data3 = "Сидоров, Сидор, Сидорович, +79998887766, sid@mail.com"
+student5 = Student.from_string(data3)
+
+# Вывод информации о студентах
+puts "Информация о студенте 1:"
+student3.display_info
+puts
+
+puts "Информация о студенте 2:"
+student4.display_info
+puts
+
+puts "Информация о студенте 3:"
+student5.display_info
