@@ -1,45 +1,67 @@
+# Подключаем классы из отдельных файлов
+require_relative 'person'
 require_relative 'student'
+require_relative 'student_short'
 
+# Создаём несколько экземпляров класса `Student` с разными комбинациями необязательных полей
 student1 = Student.new(
-  "Дерябин",
-  "Андрей",
-  "Викторович",
+  id: 1,
+  second_name: "Дерябин",
+  first_name: "Андрей",
+  surname: "Викторович",
   phone: "+79999999999",
   tg: "@vinyack",
-  email: "vinyackofficial@gmail.com"
+  git: "https://github.com/vinyack"
 )
 
 student2 = Student.new(
-  "Дерябин",
-  "Андрей",
-  "Викторович",
-  tg: "@vinyack123",
-  email: "vinyackofficial123@gmail.com"
+  id: 2,
+  second_name: "Дука",
+  first_name: "Виталий",
+  surname: "Андреевич",
+  email: "twinknezz@gmail.com",
+  git: "https://github.com/sdnezz"
 )
 
-student1.display_info
-student2.display_info
+student3 = Student.new(
+  id: 3,
+  second_name: "Андрей",
+  first_name: "Андрей",
+  surname: "Андреич",
+  phone: "+77777777777",
+  tg: "@andrei"
+)
 
-# Пример строки с полными данными
-data1 = "Иванов, Иван, Иванович, +79991234567, ivanov@example.com, https://github.com/ivanov, @ivanov"
-student3 = Student.from_string(data1)
-
-# Пример строки с минимальными данными (только ФИО)
-data2 = "Петров, Петр, Петрович"
-student4 = Student.from_string(data2)
-
-# Пример строки с частичными данными
-data3 = "Сидоров, Сидор, Сидорович, +79998887766, sid@mail.com"
-student5 = Student.from_string(data3)
-
-# Вывод информации о студентах
+# Выводим полную информацию о студентах
 puts "Информация о студенте 1:"
-student3.display_info
-puts
+puts student1
 
 puts "Информация о студенте 2:"
-student4.display_info
-puts
+puts student2
 
 puts "Информация о студенте 3:"
-student5.display_info
+puts student3
+
+# Изменяем контакты у студента 1
+student1.set_contacts(phone: "+89998887766", email: "new_email@example.com")
+puts "Информация о студенте 1 после изменения контактов:"
+puts student1
+
+# Проверяем наличие гита и контактов
+  student1.validate
+
+# Выводим сокращённую информацию через методы
+puts "Сокращённая информация о студенте 1:"
+puts "Фамилия и инициалы: #{student1.short_name}"
+puts "Краткая информация: #{student1.get_info}"
+puts "Контактная информация: #{student1.contact_info}"
+
+# Создаём объект класса `StudentShort` на основе уже созданного объекта `Student`
+student_short1 = StudentShort.from_student(student1)
+puts "Краткая информация (StudentShort) о студенте 1:"
+puts student_short1
+
+# Создаём объект `StudentShort` из строки
+student_short2 = StudentShort.from_string(id: 4, str: "Дерябин А.В.; https://github.com/vinyack; vinyack@gmail.com")
+puts "Краткая информация (StudentShort) о студенте 2 из строки:"
+puts student_short2
