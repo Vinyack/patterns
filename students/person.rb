@@ -1,99 +1,82 @@
-require_relative 'person'
-class Person
-  attr_reader :id, :first_name, :last_name, :middle_name, :git, :contact
+class person
 
-  # Конструктор
-  def initialize(id: nil, first_name:, last_name:, middle_name:, git: nil, contact: nil)
-    self.first_name = first_name
-    self.last_name = last_name
-    self.middle_name = middle_name
-    self.git = git if git
-    self.id = id if id
-    self.contact = contact if contact
-  end
+ attr_reader :id, :second_name, :first_name, :surname, :git, :contact
+ 
+   # Конструктор с общими полями для наследников, id, git и contact необязателен
+	def initialize(second_name:, first_name:, surname:, git: nil, id: nil, contact: nil)
+		self.second_name = second_name
+		self.first_name = first_name
+		self.surname = surname
+		self.git = git if git
+		self.id = id if id
+		self.contact = contact if contact
+	end
+	
+	# Сеттеры с учётом валидации
+	def id=(value)
+		raise ArgumentError, "Неверный ID: #{value}" unless Person.id_valid?(value)
+		@id = value
+	end
+	
+	def second_name=(name)
+		if Person.name_valid?(name)
+			@second_name = name
+		else
+			raise ArgumentError, "Фамилия должна содержать только буквы: #{name}"
+		end
+	end
+	
+	def first_name=(name)
+		if Person.name_valid?(name)
+			@first_name = name
+		else
+			raise ArgumentError, "Имя должно содержать только буквы: #{name}"
+		end
+	end
+	
+	def surname=(name)
+		if Person.name_valid?(name)
+			@surname = name
+		else
+			raise ArgumentError, "Отчество должно содержать только буквы: #{name}"
+		end
+	end
+	
+	def git=(git)
+		if git.nil? || Person.git_valid?(git)
+			@git = git
+		else
+			raise ArgumentError, "Некорректная ссылка на GitHub: #{git}"
+		end
+	end
+	
+	def self.id_valid?(id)
+		id.to_s.match?(/^\d+$/)
+	end
 
-  # Сеттер для id с валидацией
-  def id=(value)
-    raise ArgumentError, "Неверный ID: #{value}" unless Person.id_valid?(value)
-    @id = value
-  end
+	def self.name_valid?(name)
+		name.match?(/\A[а-яА-ЯёЁa-zA-Z]+\z/)
+	end
+	
+	def self.git_valid?(git)
+		git.match?(/\Ahttps?:\/\/(www\.)?github\.com\/[\w\-]+(\/[\w\-]+)?\z/)
+	end
+	
+	protected def contact=(value)
+		@contact = value
+	end
 
-  # Валидация-предикат для id
-  def self.id_valid?(id)
-    id.to_s.match?(/^\d+$/)
-  end
+	def short_name
+		"#{second_name} #{first_name[0]}.#{surname[0]}."
+	end
 
-  # Сеттер для git с валидацией
-  def git=(value)
-    raise ArgumentError, "Неверный Git: #{value}" unless Person.git_valid?(value)
-    @git = value
-  end
-
-  # Валидация-предикат для GitHub
-  def self.git_valid?(git)
-    git.match?(/^github\.com\/[\w.-]+$/)
-  end
-  
-  # Сеттер для first_name с валидацией
-  def first_name=(value)
-    validate_name(:first_name, value)
-    @first_name = value
-  end
-
-  # Сеттер для last_name с валидацией
-  def last_name=(value)
-    validate_name(:last_name, value)
-    @last_name = value
-  end
-  
-  # Сеттер для middle_name с валидацией
-  def middle_name=(value)
-    validate_name(:middle_name, value)
-    @middle_name = value
-  end
-
-  # Валидация имени, фамилии и отчества
-  def validate_name(field, value)
-    raise ArgumentError, "Неверное значение для #{field}: #{value}" unless Person.name_valid?(value)
-  end
-
-  # Предикат для валидация имени, фамилии и отчества
-  def self.name_valid?(name)
-    name.match?(/^[А-ЯЁA-Z][а-яёa-z-]+$/)
-  end
-
-  def git_null?
-    self.git.nil?
-  end
-
-  def contact_null?
-    self.contact.nil?
-  end
-
-  protected def contact=(value)
-    @contact = value
-  end
-
-  def validate_git_and_contact
-    git_null? && contact_null?
-  end
-
-  # Метод для получения инициалов в формате: Фамилия И.О.
-  def short_name
-    "#{last_name} #{first_name[0]}.#{middle_name[0]}."
-  end
-
-  def git_info
-    self.git
-  end  
-
-  def to_s
-    str = []
-    str << "ID: #{id}" if @id
-    str << "Фамилия: #{last_name}"
-    str << "Имя: #{first_name}"
-    str << "Отчество: #{middle_name}"
-    str << "GitHub: #{git}" if @git
-    str.join("; ")
-  end
+	def to_s
+		str = []
+		str << "ID: #{id}" if @id
+		str << "Фамилия: #{second_name}"
+		str << "Имя: #{first_name}"
+		str << "Отчество: #{surname}"
+		str << "GitHub: #{git}" if @git
+		str.join("; ")
+	end
 end
