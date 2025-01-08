@@ -1,7 +1,7 @@
 require_relative 'person'
 class Student_short
 
-attr_reader :id, :git, :contact, :short_name
+attr_reader :contact, :short_name
 
 private_class_method :new
 
