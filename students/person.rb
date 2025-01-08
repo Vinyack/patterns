@@ -1,4 +1,4 @@
-class person
+class Person
 
  attr_reader :id, :second_name, :first_name, :surname, :git, :contact
  
