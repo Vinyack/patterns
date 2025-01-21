@@ -30,6 +30,11 @@ def local_maximum?(array, index)
 	array[index] > array[index - 1] && array[index] > array[index + 1]
 end
 
+def elements_below_average(array)
+	average = array.sum.to_f / array.size
+	array.select {|elemenets| elements < average}
+end
+
 def main
 	puts "Выберите способ ввода данных: "
 	puts "1 - ввод с клавиатуры"
@@ -55,7 +60,7 @@ def main
 	puts "1 - Сдвиг массива влево на 3 элемента"
 	puts "2 - Найти элементы перед первым минимальным"
 	puts "3 - Проверить, является ли элемент по индексу локальным максимумом"
-	puts "4 - "
+	puts "4 - Найти все элементы, которые меньше среднего арифметического"
 	puts "5 - "
 	method_choice = gets.chomp.to_i
 	
@@ -73,7 +78,10 @@ def main
 			puts "Элемент #{array[index]} по индексу #{index} является локальным максимумом"
 		else
 			puts "Элемент #{array[index]} по индексу #{index} не является локальным максимумом"
+		end
 	when 4
+		below_average = elements_below_average(array)
+		puts "Элементы, которые меньше среднего арифметического: #{below_average}"
 	when 5
 	end
 end
