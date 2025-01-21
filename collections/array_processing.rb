@@ -21,7 +21,16 @@ class ArrayProcessing
 		return [] unless block_given?
 		result = []
 		@array.each do |element|
-		result << yield(element)
+		result << yield(element) # передаём текущий элемент блока и сохраняем результат
+		end
+		result
+	end
+	
+	def custom_select(array)
+		return [] unless block_given?
+		result = []
+		array.each do |element|
+		result << element if yield(element) # добавляем элемент в результат, если блок true
 		end
 		result
 	end
