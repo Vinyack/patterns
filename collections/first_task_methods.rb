@@ -23,7 +23,7 @@ def elements_before_min(array)
 end
 
 def local_maximum?(array, index)
-	if index <=0 || index >=array.size - 1
+	if index <=0 || index >= array.size - 1
 		return false
 	end
 	
@@ -32,7 +32,11 @@ end
 
 def elements_below_average(array)
 	average = array.sum.to_f / array.size
-	array.select {|elemenets| elements < average}
+	array.select { |elemenets| elements < average }
+end
+
+def elements_more_than_three_times(array)
+	array.tally.select { |_key, count| count >= 3 }.keys
 end
 
 def main
@@ -61,7 +65,7 @@ def main
 	puts "2 - Найти элементы перед первым минимальным"
 	puts "3 - Проверить, является ли элемент по индексу локальным максимумом"
 	puts "4 - Найти все элементы, которые меньше среднего арифметического"
-	puts "5 - "
+	puts "5 - Построить список элементов, встречающихся более трех раз"
 	method_choice = gets.chomp.to_i
 	
 	case method_choice
@@ -83,6 +87,9 @@ def main
 		below_average = elements_below_average(array)
 		puts "Элементы, которые меньше среднего арифметического: #{below_average}"
 	when 5
+		frequent_elements = elements_more_than_three_times(array)
+		puts "Элементы, встречающиеся более трех раз: #{frequent_elements}"
 	end
 end
+
 main
