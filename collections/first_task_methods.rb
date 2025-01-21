@@ -1,6 +1,6 @@
 def read_from_keyboard
 	puts "Введите элементы массива через пробел: "
-	gets.chomp.split.map(&: to_i)
+	gets.chomp.split.map(&:to_i)
 end
 
 def read_from_file(filename)
@@ -13,13 +13,21 @@ def read_from_file(filename)
 end
 
 def array_shift_left(array)
-	return aray if array.empty? || array.size <=3
+	return array if array.empty? || array.size <=3
 	array[3..-1] + array[0...3]
 end
 
 def elements_before_min(array)
 	min_element_index = array.index(array.min)
 	array[0...min_element_index]
+end
+
+def local_maximum?(array, index)
+	if index <=0 || index >=array.size - 1
+		return false
+	end
+	
+	array[index] > array[index - 1] && array[index] > array[index + 1]
 end
 
 def main
@@ -46,7 +54,7 @@ def main
 	puts "Выберите метод обработки массива: "
 	puts "1 - Сдвиг массива влево на 3 элемента"
 	puts "2 - Найти элементы перед первым минимальным"
-	puts "3 - "
+	puts "3 - Проверить, является ли элемент по индексу локальным максимумом"
 	puts "4 - "
 	puts "5 - "
 	method_choice = gets.chomp.to_i
@@ -59,6 +67,14 @@ def main
 		elements = elements_before_min(array)
 		puts "Элементы перед первым минимальным: #{elements}"
 	when 3
+		puts "Введите индекс элемента: "
+		index = gets.chomp.to_i
+		if local_maximum?(array, index)
+			puts "Элемент #{array[index]} по индексу #{index} является локальным максимумом"
+		else
+			puts "Элемент #{array[index]} по индексу #{index} не является локальным максимумом"
 	when 4
 	when 5
+	end
 end
+main
