@@ -35,7 +35,7 @@ class ArrayProcessing
 		result
 	end
 	
-	def custom_sort
+	def custom_sort #bubble sort
 		return @array unless block_given?
 
 		sorted = @array.dup # создание копии массива 
@@ -53,3 +53,13 @@ class ArrayProcessing
 
 		sorted # возвращаем отсортированный массив
 	end
+def custom_max
+	return nil if @array.empty?
+	return @array.max unless block_given?
+	
+	max_element = @array[0]
+	@array.each do |element|
+	max_element = element if yield(element, max_element) # если блок возвращает true,  значит, что текущий элемент больше текущего максимума
+	end
+	max_element
+end
