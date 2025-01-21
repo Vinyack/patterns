@@ -53,13 +53,28 @@ class ArrayProcessing
 
 		sorted # возвращаем отсортированный массив
 	end
-def custom_max
-	return nil if @array.empty?
-	return @array.max unless block_given?
+	def custom_max
+		return nil if @array.empty?
+		return @array.max unless block_given?
 	
-	max_element = @array[0]
-	@array.each do |element|
-	max_element = element if yield(element, max_element) # если блок возвращает true,  значит, что текущий элемент больше текущего максимума
+		max_element = @array[0]
+		@array.each do |element|
+		max_element = element if yield(element, max_element) # если блок возвращает true,  значит, что текущий элемент больше текущего максимума
+		end
+		max_element
 	end
-	max_element
-end
+	def custom_drop_while
+		return @array unless block_given?
+		result = []
+		dropping = true
+			if dropping && yield(element)
+				next
+			else
+				dropping = false
+				result << element
+			end
+		end
+		result
+	end
+	
+	
