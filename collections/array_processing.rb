@@ -16,4 +16,12 @@ class ArrayProcessing
 		end
 		nil
 	end
-			
+	
+	def custom_map
+		return [] unless block_given?
+		result = []
+		@array.each do |element|
+		result << yield(element)
+		end
+		result
+	end
