@@ -42,20 +42,6 @@ attr_reader :phone, :email, :tg
 	def validate
 		has_any_contact? && has_git?
 	end
-	
-	# Методы для возврата отдельных значений
-	
-	def get_git
-		git || "Гит не указан"
-	end
-
-	def get_contact
-		contact
-	end
-
-	def get_short_name
-		short_name
-	end
 
 	# Валидация полей
 	
