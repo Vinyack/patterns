@@ -1,4 +1,4 @@
-class ArrayProcessing
+class ArrayProcessor
 
 	def initialize(array)
 		@array = array.freeze
@@ -65,8 +65,11 @@ class ArrayProcessing
 	end
 	def custom_drop_while
 		return @array unless block_given?
+
 		result = []
 		dropping = true
+
+		@array.each do |element|
 			if dropping && yield(element)
 				next
 			else
@@ -76,5 +79,27 @@ class ArrayProcessing
 		end
 		result
 	end
+end
+
 	
-	
+# Создаем экземпляр класса с массивом
+processor = ArrayProcessing.new([1, 2, 3, 4, 5, 6, 7, 10, 12])
+
+# Вызовы методов
+puts "# detect"
+puts processor.custom_detect { |el| el > 5 }
+
+puts "# map"
+puts processor.custom_map { |el| el * 2 }
+
+puts "# select"
+puts processor.custom_select { |el| el.even? }
+
+puts "# sort"
+puts processor.custom_sort { |a, b| a > b }
+
+puts "# max"
+puts processor.custom_max { |a, b| a <=> b }
+
+puts "# drop_while"
+puts processor.custom_drop_while { |el| el < 5 }
