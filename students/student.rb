@@ -1,20 +1,30 @@
 require_relative 'person'
+require 'date'
 
 class Student
-
-attr_reader :phone, :email, :tg
+include Comparable
+attr_reader :phone, :email, :tg, :birthdate
 
 	def initialize(second_name:, first_name:, surname:, id: nil, email: nil, phone: nil, git: nil, tg: nil)
-		@birth_date = parse_date(birth_date)
+		 self.birthdate = birthdate if birthdate
 		@id = id
 		set_contacts(phone: phone, email: email, tg: tg)
 		super(second_name: second_name, first_name: first_name, surname: surname, git: git, id: id, contact: contact)
 	end
 	
-	private def parse_date(date)
-		Date.parse(date) rescue (raise ArgumentError, "Некорректная дата: #{date}")
+	def birthdate=(birthdate)
+		@birthdate = Date.parse(birthdate)
 	end
 	
+	def <=>(other)
+		if self.birthdate < other.birthdate
+			return -1
+		elsif self.birthdate == other.birthdate
+			return 0
+		else
+			return 1
+		end
+	end
 	# Краткая информация о студенте
 
 	def contact_info
