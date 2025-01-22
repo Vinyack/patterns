@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative 'array_processor'
+require_relative 'C:/Users/Vinya/OneDrive/Рабочий стол/patterns/collections/array_processor'
 
 class TestArrayProcessor < Minitest::Test
   def setup
