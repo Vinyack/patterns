@@ -1,7 +1,8 @@
 # Подключаем классы из отдельных файлов
-require_relative 'person'
 require_relative 'student'
+require_relative 'person'
 require_relative 'student_short'
+require_relative 'binary_tree'
 
 # Создаём несколько экземпляров класса `Student` с разными комбинациями необязательных полей
 student1 = Student.new(
@@ -65,3 +66,9 @@ puts student_short1
 student_short2 = StudentShort.from_string(id: 4, str: "Дерябин А.В.; https://github.com/vinyack; vinyack@gmail.com")
 puts "Краткая информация (StudentShort) о студенте 2 из строки:"
 puts student_short2
+
+# Создаем бинарное сортированное дерево
+tree = BinarySortedTree.new(students)
+
+# Итерация по дереву
+puts tree

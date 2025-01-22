@@ -1,48 +1,60 @@
+require 'tree_node'
 require 'date'
 
-class BinarySearchTree
+class BinarySortedTree
   include Enumerable
 
-  class Node
-    attr_accessor :student, :left, :right
+  attr_accessor :root
 
-    def initialize(student)
-      @student = student
-      @left = nil
-      @right = nil
+  private :root=
+
+  def initialize(obj_array)
+    if obj_array.nil?
+      raise ArgumentError.new('Неверный тип аргумента')
+    end
+
+    # Создание корня дерева с первым объектом
+    self.root = TreeNode.new(left: nil, right: nil, student: obj_array[0])
+
+    # Добавление всех остальных объектов в дерево
+    obj_array[1..].each do |student|
+      add_node(self.root, student)
     end
   end
 
-  def initialize
-    @root = nil
-  end
-
-  # Добавление студента в дерево
-  def add(student)
-    @root = add_rec(@root, student)
-  end
-
-  def add_rec(node, student)
-    return Node.new(student) if node.nil?
-
-    if student.birth_date < node.student.birth_date
-      node.left = add_rec(node.left, student)
+  # Метод для добавления узлов в дерево
+  def add_node(node, student)
+    if student < node.student  # Сравниваем с текущим узлом
+      if node.left.nil?
+        node.left = TreeNode.new(left: nil, right: nil, student: student)
+      else
+        add_node(node.left, student)
+      end
     else
-      node.right = add_rec(node.right, student)
+      if node.right.nil?
+        node.right = TreeNode.new(left: nil, right: nil, student: student)
+      else
+        add_node(node.right, student)
+      end
     end
-    node
   end
 
-  # Реализация each для модуля Enumerable (обход in-order)
+  # Реализация метода each для обхода дерева
   def each(&block)
-    in_order_traversal(@root, &block)
+    self.root.each(&block)
   end
 
-  private def in_order_traversal(node, &block)
-    return if node.nil?
+  # Вывод дерева
+  def print_in_order(node)
+    if !node.nil?
+      puts node.student  # Сначала выводим текущий узел
+      print_in_order(node.left)  # Рекурсивный обход левого поддерева
+      print_in_order(node.right)  # Рекурсивный обход правого поддерева
+    end
+  end
 
-    in_order_traversal(node.left, &block)
-    block.call(node.student)
-    in_order_traversal(node.right, &block)
+  # Преобразование дерева в строку
+  def to_s
+    print_in_order(self.root)
   end
 end
