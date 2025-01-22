@@ -53,6 +53,7 @@ class ArrayProcessor
 
 		sorted # возвращаем отсортированный массив
 	end
+	
 	def custom_max
 		return nil if @array.empty?
 		return @array.max unless block_given?
@@ -63,6 +64,7 @@ class ArrayProcessor
 		end
 		max_element
 	end
+	
 	def custom_drop_while
 		return @array unless block_given?
 
@@ -81,7 +83,6 @@ class ArrayProcessor
 	end
 end
 
-	
 # Создаем экземпляр класса с массивом
 processor = ArrayProcessor.new([1, 2, 3, 4, 5, 6, 7, 10, 12])
 
