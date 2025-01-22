@@ -5,9 +5,14 @@ class Student
 attr_reader :phone, :email, :tg
 
 	def initialize(second_name:, first_name:, surname:, id: nil, email: nil, phone: nil, git: nil, tg: nil)
+		@birth_date = parse_date(birth_date)
 		@id = id
 		set_contacts(phone: phone, email: email, tg: tg)
 		super(second_name: second_name, first_name: first_name, surname: surname, git: git, id: id, contact: contact)
+	end
+	
+	private def parse_date(date)
+		Date.parse(date) rescue (raise ArgumentError, "Некорректная дата: #{date}")
 	end
 	
 	# Краткая информация о студенте
