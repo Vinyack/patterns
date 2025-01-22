@@ -1,3 +1,5 @@
+# Вариант 6
+
 def read_from_keyboard
 	puts "Введите элементы массива через пробел: "
 	gets.chomp.split.map(&:to_i)
@@ -12,21 +14,21 @@ def read_from_file(filename)
 	end
 end
 
-#1
+#1.6
 
 def array_shift_left(array)
 	return array if array.empty? || array.size <=3
 	array[3..-1] + array[0...3]
 end
 
-#2
+#1.18
 
 def elements_before_min(array)
 	min_element_index = array.index(array.min)
 	array[0...min_element_index]
 end
 
-#3
+#1.30
 
 def local_maximum?(array, index)
 	if index <=0 || index >= array.size - 1
@@ -36,14 +38,14 @@ def local_maximum?(array, index)
 	array[index] > array[index - 1] && array[index] > array[index + 1]
 end
 
-#4
+#1.42
 
 def elements_below_average(array)
 	average = array.sum.to_f / array.size
 	array.select { |elemenets| elements < average }
 end
 
-#5
+#1.54
 
 def elements_more_than_three_times(array)
 	array.tally.select { |_key, count| count >= 3 }.keys

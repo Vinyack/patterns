@@ -7,6 +7,9 @@ class ArrayProcessor
 	def elements
 		@array
 	end
+
+
+	# 6
 	
 	def custom_detect
 		return nil unless block_given?
@@ -17,6 +20,8 @@ class ArrayProcessor
 		nil
 	end
 	
+	# 18
+	
 	def custom_map
 		return [] unless block_given?
 		result = []
@@ -25,7 +30,9 @@ class ArrayProcessor
 		end
 		result
 	end
-	
+
+	# 30
+
 	def custom_select
 		return [] unless block_given?
 		result = []
@@ -34,7 +41,9 @@ class ArrayProcessor
 		end
 		result
 	end
-	
+
+	# 31
+
 	def custom_sort #bubble sort
 		return @array unless block_given?
 
@@ -53,7 +62,9 @@ class ArrayProcessor
 
 		sorted # возвращаем отсортированный массив
 	end
-	
+
+	# 19
+
 	def custom_max
 		return nil if @array.empty?
 		return @array.max unless block_given?
@@ -64,6 +75,8 @@ class ArrayProcessor
 		end
 		max_element
 	end
+	
+	# 7
 	
 	def custom_drop_while
 		return @array unless block_given?
