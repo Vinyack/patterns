@@ -1,14 +1,39 @@
 require_relative 'tag'
 
-# Класс для представления дерева HTML
 class HTMLTree
+  include Enumerable # Подмешиваем Enumerable
+
   attr_reader :root
 
   def initialize(html_string)
     @root = parse_html(html_string)
   end
 
-  # Рекурсивный парсер HTML (упрощенный)
+  # Метод обхода в ширину (BFS)
+  def each_bfs(&block)
+    return unless @root
+
+    queue = [@root] # Используем очередь
+    until queue.empty?
+      current = queue.shift
+      block.call(current)
+      queue.concat(current.children) # Добавляем детей в очередь
+    end
+  end
+
+  # метод для обхода в глубину , реализация each для Enumerable
+  def each(&block)
+    return unless @root
+
+    stack = [@root] # используем стек
+    until stack.empty?
+      current = stack.pop
+      block.call(current)
+      stack.concat(current.children.reverse) # добавляем детей в стек
+    end
+  end
+
+  # парсер HTML (упрощенный)
   def parse_html(html_string)
     html_string = html_string.strip
     tag_match = html_string.match(/<(\w+)(.*?)>/)
@@ -31,7 +56,7 @@ class HTMLTree
     end
   end
 
-  # Парсер атрибутов тега
+  # парсер атрибутов тега
   def parse_attributes(attr_string)
     attributes = {}
     attr_string.scan(/(\w+)="(.*?)"/).each do |key, value|
@@ -40,7 +65,7 @@ class HTMLTree
     attributes
   end
 
-  # Извлечение дочерних элементов из содержимого тега
+  # извлечение дочерних элементов из содержимого тега
   def extract_children(content)
     children = []
     while (child_match = content.match(/<\w+.*?>.*?<\/\w+>/))
@@ -50,8 +75,10 @@ class HTMLTree
     children
   end
 
-  # Возвращает строку, представляющую дерево
+  # Обход в ширину для метода to_s (по желанию)
   def to_s
-    @root.to_s
+    result = []
+    each_bfs { |node| result << node.to_s }
+    result.join("\n")
   end
 end
