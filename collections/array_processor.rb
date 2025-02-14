@@ -45,23 +45,25 @@ class ArrayProcessor
 	# 31
 
 	def custom_sort #bubble sort
-		return @array unless block_given?
-
-		sorted = @array.dup # создание копии массива 
-
-		loop do
-			swapped = false # флаг, который указывает, были ли перестановки
-			(0...sorted.size - 1).each do |i|
-			if yield(sorted[i], sorted[i + 1]) # вызываем блок для сравнения пары
-				sorted[i], sorted[i + 1] = sorted[i + 1], sorted[i]
-				swapped = true # устанавливаем флаг, если была перестановка
-			end
-			end
-			break unless swapped # если не было перестановок, сортировка завершена
+		return array if array.empty?
+		sorted = array.dup
+		n = array.length
+		
+		n.times do |i|
+		(n-i-1).times do |j|
+		if block_given?
+		if yield(sorted[j], sorted[j+1])>0
+		sorted[j], sorted[j+1] = sorted[j+1], sorted[j]
 		end
-
-		sorted # возвращаем отсортированный массив
-	end
+		else
+		if sorted[j]>sorted[j+1]
+		sorted[j], sorted[j+1] = sorted[j+1], sorted[j]
+		end
+		end
+		end
+		end
+		sorted
+		end
 
 	# 19
 
