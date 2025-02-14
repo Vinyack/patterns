@@ -6,7 +6,7 @@ include Comparable
 attr_reader :phone, :email, :tg, :birthdate
 
 	def initialize(second_name:, first_name:, surname:, id: nil, email: nil, phone: nil, git: nil, tg: nil)
-		 self.birthdate = birthdate if birthdate
+		self.birthdate = birthdate if birthdate
 		@id = id
 		set_contacts(phone: phone, email: email, tg: tg)
 		super(second_name: second_name, first_name: first_name, surname: surname, git: git, id: id, contact: contact)
