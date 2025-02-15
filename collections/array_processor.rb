@@ -44,7 +44,7 @@ class ArrayProcessor
 
 	# 31
 
-	def custom_sort #bubble sort
+	def custom_sort(array) #bubble sort
 		return array if array.empty?
 		sorted = array.dup
 		n = array.length
