@@ -1,7 +1,7 @@
 require_relative 'person'
 
 class StudentShort < Person
-  attr_reader :contact, :short_name
+  attr_reader :contact
 
   private_class_method :new
 
@@ -16,7 +16,7 @@ class StudentShort < Person
       id: student.id,
       git: student.git,
       short_name: student.short_name,
-      contact: student.contact_info
+      contact: student.phone || student.telegram || student.email
     )
   end
 
@@ -35,11 +35,7 @@ class StudentShort < Person
   end
 
   def to_s
-    str = []
-    str << "ID: #{@id}" if @id
-    str << "Фамилия И.О.: #{@short_name}"
-    str << "GitHub: #{@git}" if @git
-    str << "#{@contact}" if @contact
-    str.join("; ")
+    "#{@id} #{@short_name} #{@git} #{@contact}"
   end
+
 end
