@@ -29,26 +29,27 @@ attr_reader :phone, :email, :tg, :birthdate
 		self.email = email if email
 		self.phone = phone if phone
 		self.tg = tg if tg
-		self.contact = contact_info
+		self.contact = contact
 	end
 	
-	def get_initials_and_contact
-    		"#{initials_name}; GitHub: #{@git}; Контакт: #{get_contact}"
+	def short_name_and_contact
+    		"#{short_name}; GitHub: #{@git}; Контакт: #{get_contact}"
   	end
 	
-	def get_contact
+	def contact
 		"#{phone || tg || email}"
-		
+	end
+	
+	def git_present?
+		@git && !@git.strip.empty?
+	end
+	
 	def contact_present?
     		[@phone, @telegram, @email].any? { |contact| contact && !contact.strip.empty? }
   	end
 	
-	def has_git?
-		!!@git
-	end
-	
-	def validate
-		has_any_contact? && has_git?
+	def contact_and_git_present?
+		git_present? || contact_present?
 	end
 	
 	def self.phone_valid?(phone)
@@ -79,11 +80,6 @@ attr_reader :phone, :email, :tg, :birthdate
 	end
 		
 	def to_s
-		str = []
-		str << super
-		str << "Номер телефона: #{phone}" if phone
-		str << "Почта: #{email}" if email
-		str << "Телеграм: #{tg}" if tg
-		str.join("; ")
+		"#{@id} #{@surname} #{@name} #{@middle_name}\nGit: #{@git}\nДанные для связи:\nНомер телефона: #{@phone}\nТелеграм: #{@telegram}\nEmail: #{@email}\n"
 	end
  end
