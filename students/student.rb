@@ -5,7 +5,7 @@ class Student
 include Comparable
 attr_reader :phone, :email, :tg, :birthdate
 
-	def initialize(second_name:, first_name:, surname:, id: nil, email: nil, phone: nil, git: nil, tg: nil)
+	def initialize(middle_name:, first_name:, surname:, id: nil, email: nil, phone: nil, git: nil, tg: nil)
 		self.birthdate = birthdate if birthdate
 		set_contacts(phone: phone, email: email, tg: tg)
 		super(git: git, id: id, contact: contact)
@@ -80,6 +80,18 @@ attr_reader :phone, :email, :tg, :birthdate
 	end
 		
 	def to_s
-		"#{@id} #{@surname} #{@name} #{@middle_name}\nGit: #{@git}\nДанные для связи:\nНомер телефона: #{@phone}\nТелеграм: #{@telegram}\nEmail: #{@email}\n"
+		"#{@id} #{@surname} #{@first_name} #{@middle_name}\nGit: #{@git}\nДанные для связи:\nНомер телефона: #{@phone}\nТелеграм: #{@telegram}\nEmail: #{@email}\n"
+	end
+	
+	def surname=(value)
+		@surname=(value)
+	end
+
+	def middle_name=(value)
+		@middle_name = value
+	end
+
+	def first_name=(value)
+		@first_name = value
 	end
  end
