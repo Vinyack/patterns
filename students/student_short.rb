@@ -5,7 +5,7 @@ class StudentShort < Person
 
   private_class_method :new
 
-  def initialize(id:, git:, contact:, short_name:)
+  private def initialize(id:, git:, contact:, short_name:)
     super(id: id, git: git)
     @contact = contact
     @short_name = short_name
@@ -16,7 +16,7 @@ class StudentShort < Person
       id: student.id,
       git: student.git,
       short_name: student.short_name,
-      contact: student.phone || student.telegram || student.email
+      contact: student.phone || student.tg || student.email
     )
   end
 
@@ -28,9 +28,9 @@ class StudentShort < Person
     init = {}
     parametrs = split_str_params(str)
     init[:id] = id
-    init[:short_name] = parametrs[0]
-    init[:git] = parametrs[1]
-    init[:contact] = parametrs[2..].join(' ')
+    init[:short_name] = parametrs[0] || ''
+    init[:git] = parametrs[1] || ''
+    init[:contact] = parametrs[2..]&.join(' ') || ''
     self.new(**init)
   end
 

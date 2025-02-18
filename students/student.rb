@@ -8,7 +8,7 @@ attr_reader :phone, :email, :tg, :birthdate
 	def initialize(middle_name:, first_name:, surname:, id: nil, email: nil, phone: nil, git: nil, tg: nil)
 		self.birthdate = birthdate if birthdate
 		set_contacts(phone: phone, email: email, tg: tg)
-		super(git: git, id: id, contact: contact)
+		super(git: git, id: id)
 	end
 	
 	def birthdate=(birthdate)
@@ -25,15 +25,14 @@ attr_reader :phone, :email, :tg, :birthdate
 		end
 	end
 
-	def set_contacts(email, phone, tg)
+	def set_contacts(phone: nil, email: nil, tg: nil)
 		self.email = email if email
 		self.phone = phone if phone
 		self.tg = tg if tg
-		self.contact = contact
 	end
 	
 	def short_name_and_contact
-    		"#{short_name}; GitHub: #{@git}; Контакт: #{get_contact}"
+    		"#{short_name}; GitHub: #{@git}; Контакт: #{contact}"
   	end
 	
 	def contact
@@ -45,7 +44,7 @@ attr_reader :phone, :email, :tg, :birthdate
 	end
 	
 	def contact_present?
-    		[@phone, @telegram, @email].any? { |contact| contact && !contact.strip.empty? }
+    		[@phone, @tg, @email].any? { |contact| contact && !contact.strip.empty? }
   	end
 	
 	def contact_and_git_present?
@@ -69,9 +68,9 @@ attr_reader :phone, :email, :tg, :birthdate
     		@phone = value
   	end
 
- 	def telegram=(value)
-    		raise ArgumentError, 'Некорректный Telegram' unless self.class.telegram_valid?(value)
-    		@telegram = value
+ 	def tg=(value)
+    		raise ArgumentError, 'Некорректный Telegram' unless self.class.tg_valid?(value)
+    		@tg = value
   	end
 
   	def email=(value)
@@ -80,7 +79,7 @@ attr_reader :phone, :email, :tg, :birthdate
 	end
 		
 	def to_s
-		"#{@id} #{@surname} #{@first_name} #{@middle_name}\nGit: #{@git}\nДанные для связи:\nНомер телефона: #{@phone}\nТелеграм: #{@telegram}\nEmail: #{@email}\n"
+		"#{@id} #{@surname} #{@first_name} #{@middle_name}\nGit: #{@git}\nДанные для связи:\nНомер телефона: #{@phone}\nТелеграм: #{@tg}\nEmail: #{@email}\n"
 	end
 	
 	def surname=(value)
