@@ -7,9 +7,8 @@ attr_reader :phone, :email, :tg, :birthdate
 
 	def initialize(second_name:, first_name:, surname:, id: nil, email: nil, phone: nil, git: nil, tg: nil)
 		self.birthdate = birthdate if birthdate
-		@id = id
 		set_contacts(phone: phone, email: email, tg: tg)
-		super(second_name: second_name, first_name: first_name, surname: surname, git: git, id: id, contact: contact)
+		super(git: git, id: id, contact: contact)
 	end
 	
 	def birthdate=(birthdate)
@@ -25,20 +24,7 @@ attr_reader :phone, :email, :tg, :birthdate
 			return 1
 		end
 	end
-	# Краткая информация о студенте
 
-	def contact_info
-	  if @phone
-	    "Телефон: #{@phone}"
-	  elsif @tg
-	    "Телеграм: #{@tg}"
-	  elsif @email
-	    "Почта: #{@email}"
-	  else
-	    nil
-	  end
-	end
-	
 	def set_contacts(email, phone, tg)
 		self.email = email if email
 		self.phone = phone if phone
@@ -46,9 +32,16 @@ attr_reader :phone, :email, :tg, :birthdate
 		self.contact = contact_info
 	end
 	
-	def has_any_contact?
-		!!(@phone || @email || @tg)
-	end
+	def get_initials_and_contact
+    		"#{initials_name}; GitHub: #{@git}; Контакт: #{get_contact}"
+  	end
+	
+	def get_contact
+		"#{phone || tg || email}"
+		
+	def contact_present?
+    		[@phone, @telegram, @email].any? { |contact| contact && !contact.strip.empty? }
+  	end
 	
 	def has_git?
 		!!@git
@@ -57,8 +50,6 @@ attr_reader :phone, :email, :tg, :birthdate
 	def validate
 		has_any_contact? && has_git?
 	end
-
-	# Валидация полей
 	
 	def self.phone_valid?(phone)
 		phone.to_s.match?(/^(\d{11}|\+\d{11})$/)
@@ -72,30 +63,21 @@ attr_reader :phone, :email, :tg, :birthdate
 		tg.match?(/\A@[\w\d_]{5,32}\z/)
 	end
 	
-	private def email=(email)
-		if email.nil? || Student.email_valid?(email)
-			@email = email
-		else
-			raise ArgumentError, "Некорректный email: #{email}"
-		end
+  	def phone=(value)
+    		raise ArgumentError, 'Некорректный номер телефона' unless self.class.phone_valid?(value)
+    		@phone = value
+  	end
+
+ 	def telegram=(value)
+    		raise ArgumentError, 'Некорректный Telegram' unless self.class.telegram_valid?(value)
+    		@telegram = value
+  	end
+
+  	def email=(value)
+    		raise ArgumentError, 'Некорректный email' unless self.class.email_valid?(value)
+    		@email = value
 	end
-	
-	private def phone=(phone)
-		if phone.nil? || Student.phone_valid?(phone)
-			@phone = phone
-		else
-			raise ArgumentError, "Некорректный номер телефона: #{phone}"
-		end
-	end
-	
-	private def tg=(tg)
-		if tg.nil? || Student.tg_valid?(tg)
-			@tg = tg
-		else
-			raise ArgumentError, "Некорректное имя пользователя Telegram: #{tg}"
-		end
-	end
-	
+		
 	def to_s
 		str = []
 		str << super
