@@ -15,7 +15,7 @@ class Person
     @id = value
   end
 
-  private def middle_name=(name)
+  def middle_name=(name)
     if Person.name_valid?(name)
       @middle_name = name
     else
@@ -23,7 +23,7 @@ class Person
     end
   end
 
-  private def first_name=(name)
+  def first_name=(name)
     if Person.name_valid?(name)
       @first_name = name
     else
@@ -31,7 +31,7 @@ class Person
     end
   end
 
-  private def surname=(name)
+  def surname=(name)
     if Person.name_valid?(name)
       @surname = name
     else
