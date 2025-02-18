@@ -63,17 +63,17 @@ attr_reader :phone, :email, :tg, :birthdate
 		tg.match?(/\A@[\w\d_]{5,32}\z/)
 	end
 	
-  	def phone=(value)
+  	private def phone=(value)
     		raise ArgumentError, 'Некорректный номер телефона' unless self.class.phone_valid?(value)
     		@phone = value
   	end
 
- 	def tg=(value)
+ 	private def tg=(value)
     		raise ArgumentError, 'Некорректный Telegram' unless self.class.tg_valid?(value)
     		@tg = value
   	end
 
-  	def email=(value)
+  	private def email=(value)
     		raise ArgumentError, 'Некорректный email' unless self.class.email_valid?(value)
     		@email = value
 	end
