@@ -1,13 +1,12 @@
 class Person
-  attr_reader :id, :second_name, :first_name, :surname, :git, :contact
+  attr_reader :id, :middle_name, :first_name, :surname, :git
 
-  def initialize(second_name:, first_name:, surname:, git: nil, id: nil, contact: nil)
-    self.second_name = second_name
+  def initialize(middle_name:, first_name:, surname:, git: nil, id: nil)
+    self.middle_name = middle_name
     self.first_name = first_name
     self.surname = surname
     self.git = git if git
     self.id = id if id
-    self.contact = contact if contact
   end
 
   # Сеттеры с учётом валидации
@@ -16,15 +15,15 @@ class Person
     @id = value
   end
 
-  def second_name=(name)
+  private def middle_name=(name)
     if Person.name_valid?(name)
-      @second_name = name
+      @middle_name = name
     else
       raise ArgumentError, "Фамилия должна содержать только буквы: #{name}"
     end
   end
 
-  def first_name=(name)
+  private def first_name=(name)
     if Person.name_valid?(name)
       @first_name = name
     else
@@ -32,14 +31,20 @@ class Person
     end
   end
 
-  def surname=(name)
+  private def surname=(name)
     if Person.name_valid?(name)
       @surname = name
     else
       raise ArgumentError, "Отчество должно содержать только буквы: #{name}"
     end
   end
-
+  
+  # Проверка на наличие гита
+  
+  def git_present?
+    !@git.nil? && !@git.strip.empty?
+  end
+  
   def git=(git)
     if git.nil? || Person.git_valid?(git)
       @git = git
@@ -47,12 +52,27 @@ class Person
       raise ArgumentError, "Некорректная ссылка на GitHub: #{git}"
     end
   end
-
-  # Метод для получения контактной информации
-  def contact_info
-    @contact
+  
+  # Абстрактные методы
+  
+  def contact 
+    raise NotImplementedError, 'Метод contact должен быть реализован в подклассе Student'
+  end
+  
+  def contact_present?
+    raise NotImplementedError, 'Метод contact_present? должен быть реализован в подклассе Student'
   end
 
+  def contact_and_git_present?
+    raise NotImplementedError, 'Метод contact_and_git_present? должен быть реализован в подклассе Student'
+  end
+  
+  #
+  
+  def short_name
+    "#{@surname} #{@name}.#{@middle_name}."
+  end
+  
   # Метод для установки контактов
   def set_contacts(phone: nil, email: nil, tg: nil)
     self.phone = phone if phone
@@ -74,60 +94,4 @@ class Person
     git.match?(/\Ahttps?:\/\/(www\.)?github\.com\/[\w\-]+(\/[\w\-]+)?\z/)
   end
 
-  def self.phone_valid?(phone)
-    phone.to_s.match?(/^(\d{11}|\+\d{11})$/)
-  end
-
-  def self.email_valid?(email)
-    email.match?(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
-  end
-
-  def self.tg_valid?(tg)
-    tg.match?(/\A@[\w\d_]{5,32}\z/)
-  end
-
-  protected
-
-  def contact=(value)
-    @contact = value
-  end
-
-  def phone=(phone)
-    if phone.nil? || Person.phone_valid?(phone)
-      @phone = phone
-    else
-      raise ArgumentError, "Некорректный номер телефона: #{phone}"
-    end
-  end
-
-  def email=(email)
-    if email.nil? || Person.email_valid?(email)
-      @email = email
-    else
-      raise ArgumentError, "Некорректный email: #{email}"
-    end
-  end
-
-  def tg=(tg)
-    if tg.nil? || Person.tg_valid?(tg)
-      @tg = tg
-    else
-      raise ArgumentError, "Некорректное имя пользователя Telegram: #{tg}"
-    end
-  end
-
-  def short_name
-    "#{second_name} #{first_name[0]}.#{surname[0]}."
-  end
-
-  def to_s
-    str = []
-    str << "ID: #{id}" if @id
-    str << "Фамилия: #{second_name}"
-    str << "Имя: #{first_name}"
-    str << "Отчество: #{surname}"
-    str << "GitHub: #{git}" if @git
-    str << "Контакт: #{contact}" if @contact
-    str.join("; ")
-  end
 end
