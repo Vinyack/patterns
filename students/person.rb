@@ -73,14 +73,6 @@ class Person
     "#{@surname} #{@name}.#{@middle_name}."
   end
   
-  # Метод для установки контактов
-  def set_contacts(phone: nil, email: nil, tg: nil)
-    self.phone = phone if phone
-    self.email = email if email
-    self.tg = tg if tg
-    self.contact = [phone, email, tg].compact.join(', ')
-  end
-
   # Валидация полей
   def self.id_valid?(id)
     id.to_s.match?(/^\d+$/)
